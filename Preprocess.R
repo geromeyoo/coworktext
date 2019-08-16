@@ -20,7 +20,7 @@ if(!nzchar(system.file(package = "corpus.JSS.papers"))) {
 ########################################
 library(tm)
 library(XML)
-
+library(readr)
 ########################################
 ## only going to use ASCII characters
 ########################################
@@ -42,88 +42,84 @@ data = data.table::data.table(title = JSS_papers.data.frame$title,
 
 rm(JSS_papers)
 rm(JSS_papers.data.frame)
+
+########################################
+## Altered Abstracts from original
+########################################
+## Genome sequencing in microfabricated high-density picolitre reactors
+## - Author last name plant, no plant in abstracts
+##
+## Addaptive radiation optimization for climate adaptive building facade design strategy
+## - no plant in abstracts
+##
+## Removed and altered with other texts
+## Application of Fuzzy Comprehensive Evaluation on COGAG Power Plant of Performance
+## Extension Study on Electricity Market of Power Plant Investment Environment
 ########################################
 ## open files
 ########################################
-
+# Power
+########################################
 # making directory as an object
-src_dir <- c("~\\abstracts\\jss")
-src_dir
-
+# setwd("C:\\Users\\gerom\\Desktop\\collabo\\coworktext")
+setwd(".\\injection abstracts\\power")
+src_dir = getwd()
+# src_dir
 # listing up name of files in the directory => object
 src_file <- list.files(src_dir) # list
-src_file
-
-title <- rep(NA,8)
-description <- rep(NA,8)
+filecount = sum(nzchar(src_file, keepNA = FALSE))
+title <- rep(NA,filecount)
+description <- rep(NA,filecount)
 inject.data <- data.frame(title,description)
 
-for (i in 1:8){
+# put data into data.frame : inject.data
+for (i in 1:filecount){
   inject.data[i,1] = src_file[i]
 }
-
-inject.data
-
-setwd("E:\\Desktop\\Abstracts\\Injection Abstracts")  
-
-library(readr)
-txt01 <- read_file("01.txt")
-# Sequential Probability Ratio Test for Nuclear Plant Component Surveillance
-txt02 <- read_file("02.txt")
-# The Cognitive and Economic Value of a Nuclear Power Plant in Korea
-txt03 <- read_file("03.txt")
-# Human Reliability Analysis for Digitized Nuclear Power Plants: Case Study on the LingAo II Nuclear Power Plant
-txt04 <- read_file("04.txt")
-# Innovative Nuclear Power Building Arrangement in Consideration of Decommissioning
-txt05 <- read_file("05.txt")
-# Plant behaviour from human imprints and the cultivation of wild cereals in Holocene Sahara 
-txt06 <- read_file("06.txt")
-# Farming with crops and rocks to address global climate, food and soil security
-txt07 <- read_file("07s.txt")
-# A genome for gnetophytes and early evolution of seed plants
-txt08 <- read_file("08.txt")
-# Enhanced plant growth by siderophores produced by plant growth-promoting rhizobacteria
-
-inject.data[1,2] <- txt07
-inject.data[2,2] <- txt08
-inject.data[3,2] <- txt06
-inject.data[4,2] <- txt03
-inject.data[5,2] <- txt04
-inject.data[6,2] <- txt05
-inject.data[7,2] <- txt01
-inject.data[8,2] <- txt02
-
-## modification made
-# making directory as an object
-
-setwd(".\\abstracts\\power")
-dir = getwd()
-src_dir <- c(dir)
-src_dir
-
-# listing up name of files in the directory => object
-src_file <- list.files(src_dir) # list
-src_file
-
-title <- rep(NA,8)
-description <- rep(NA,8)
-inject.data <- data.frame(title,description)
-rm(title)
-rm(description)
-
-for (i in 1:8){
-  inject.data[i,1] = src_file[i]
-}
-# behind .txt removal needed
-
-for (i in 1:8){
+for (i in 1:filecount){
   inject.data[i,2] = read_file(inject.data[i,1])
 }
 inject.data
-##
+########################################
+# Tree
+########################################
+# making directory as an object
+setwd("..\\")
+setwd(".\\tree")
+src_dir = getwd()
+# src_dir
+# listing up name of files in the directory => object
+src_file <- list.files(src_dir) # list
+filecount = sum(nzchar(src_file, keepNA = FALSE))
+title <- rep(NA,filecount)
+description <- rep(NA,filecount)
+inject.data1 <- data.frame(title,description)
 
+# put data into data.frame : inject.data1
+for (i in 1:filecount){
+  inject.data1[i,1] = src_file[i]
+}
+# behind .txt removal needed
+for (i in 1:filecount){
+  inject.data1[i,2] = read_file(inject.data1[i,1])
+}
+inject.data1
 
+# bind
+inject.data <- rbind(inject.data,inject.data1)
+inject.data
 
+# environment clearing
+rm(title)
+rm(description)
+rm(filecount)
+rm(src_dir)
+rm(src_file)
+rm(inject.data1)
+
+########################################
+## Updated till here
+########################################
 
 ########################################
 ## Corpus make
